@@ -21,7 +21,7 @@
         "offset_x": 6,
         "offset_y": 0
       },
-      "width": "providers.count * (ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62) + max(0, providers.count - 1) * 6 + providers.opencode.enabled * 28 + providers.cursor.enabled * 18",
+      "width": "providers.count * (ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62 + display.minutes * 18) + max(0, providers.count - 1) * 6 + providers.opencode.enabled * 28 + providers.cursor.enabled * 18",
       "height": "46",
       "background": {
         "type": "none"
@@ -44,7 +44,7 @@
           "render": "providers.cursor.enabled",
           "visibility": "100",
           "parent": "provider-row",
-          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 80",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 80 + display.minutes * 18",
           "height": "46",
           "background": {
             "type": "none"
@@ -101,7 +101,7 @@
           "parent": "cursor-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "9",
-          "width": "80",
+          "width": "80 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -169,7 +169,7 @@
           "parent": "cursor-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "9",
-          "width": "80",
+          "width": "80 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -237,7 +237,7 @@
           "parent": "cursor-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "80",
+          "width": "80 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -305,7 +305,7 @@
           "parent": "cursor-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "80",
+          "width": "80 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -356,7 +356,7 @@
           "render": "providers.claude.enabled",
           "visibility": "100",
           "parent": "provider-row",
-          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62 + display.minutes * 18",
           "height": "46",
           "background": {
             "type": "none"
@@ -413,7 +413,7 @@
           "parent": "claude-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "9",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -481,7 +481,7 @@
           "parent": "claude-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "9",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -549,7 +549,7 @@
           "parent": "claude-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -617,7 +617,7 @@
           "parent": "claude-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -648,7 +648,7 @@
           "render": "providers.codex.enabled",
           "visibility": "100",
           "parent": "provider-row",
-          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62 + display.minutes * 18",
           "height": "46",
           "background": {
             "type": "none"
@@ -705,7 +705,7 @@
           "parent": "codex-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "9",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -773,7 +773,7 @@
           "parent": "codex-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "9",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -841,7 +841,7 @@
           "parent": "codex-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -909,7 +909,7 @@
           "parent": "codex-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -940,7 +940,7 @@
           "render": "providers.antigravity.enabled",
           "visibility": "100",
           "parent": "provider-row",
-          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62 + display.minutes * 18",
           "height": "46",
           "background": {
             "type": "none"
@@ -997,7 +997,7 @@
           "parent": "antigravity-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "9",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -1065,7 +1065,7 @@
           "parent": "antigravity-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "9",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -1133,7 +1133,7 @@
           "parent": "antigravity-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -1201,7 +1201,7 @@
           "parent": "antigravity-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -1232,7 +1232,7 @@
           "render": "providers.opencode.enabled",
           "visibility": "100",
           "parent": "provider-row",
-          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 90",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 90 + display.minutes * 18",
           "height": "46",
           "background": {
             "type": "none"
@@ -1289,7 +1289,7 @@
           "parent": "opencode-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "9",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -1357,7 +1357,7 @@
           "parent": "opencode-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "9",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -1425,7 +1425,7 @@
           "parent": "opencode-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "90",
+          "width": "90 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -1493,7 +1493,7 @@
           "parent": "opencode-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "90",
+          "width": "90 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -1795,7 +1795,7 @@
           "name": "Grok provider",
           "render": "providers.grok.enabled",
           "parent": "provider-row",
-          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62 + display.minutes * 18",
           "height": "46"
         },
         {
@@ -1841,7 +1841,7 @@
           "parent": "grok-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -1909,7 +1909,7 @@
           "parent": "grok-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -2075,7 +2075,7 @@
           "name": "Copilot provider",
           "render": "providers.copilot.enabled",
           "parent": "provider-row",
-          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4 + 62 + display.minutes * 18",
           "height": "46"
         },
         {
@@ -2121,7 +2121,7 @@
           "parent": "copilot-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"
@@ -2189,7 +2189,7 @@
           "parent": "copilot-provider",
           "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 4",
           "y": "25",
-          "width": "62",
+          "width": "62 + display.minutes * 18",
           "height": "13",
           "background": {
             "type": "none"

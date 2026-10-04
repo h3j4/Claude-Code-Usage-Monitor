@@ -731,6 +731,62 @@ fn usage_lines_handle_loading_errors_missing_resets_and_language() {
 }
 
 #[test]
+fn usage_lines_include_minutes_only_when_enabled() {
+    let usage = AppUsageData::from_iter([(
+        ProviderId::Claude,
+        crate::models::UsageData {
+            session: crate::models::UsageSection {
+                available: true,
+                percentage: 25.0,
+                resets_at: Some(
+                    std::time::SystemTime::now() + Duration::from_secs(2 * 3_600 + 15 * 60 + 30),
+                ),
+            },
+            weekly: crate::models::UsageSection {
+                available: true,
+                percentage: 40.0,
+                resets_at: Some(
+                    std::time::SystemTime::now() + Duration::from_secs(3 * 86_400 + 4 * 3_600 + 30),
+                ),
+            },
+            ..Default::default()
+        },
+    )]);
+    let context = |minutes: bool| {
+        DataContext::from_usage_with_runtime(
+            Some(&usage),
+            &Canvas::default(),
+            ThemeRuntime::default().with_countdown_minutes(minutes),
+        )
+    };
+    let rounded = context(false);
+    assert_eq!(rounded.get("display.minutes"), Some(0.0));
+    assert_eq!(
+        format_template("{claude.session:usage_line}", &rounded),
+        "25% · 2h"
+    );
+    assert_eq!(
+        format_template("{claude.weekly:usage_line}", &rounded),
+        "40% · 3d"
+    );
+
+    let minutes = context(true);
+    assert_eq!(minutes.get("display.minutes"), Some(1.0));
+    assert_eq!(
+        format_template("{claude.session:usage_line}", &minutes),
+        "25% · 2h 15m"
+    );
+    assert_eq!(
+        format_template("{claude.weekly:usage_line}", &minutes),
+        "40% · 3d 4h"
+    );
+    assert_eq!(
+        format_template("{claude.session:usage_badge}", &minutes),
+        "25%"
+    );
+}
+
+#[test]
 fn built_in_classic_uses_149_geometry() {
     let theme = ThemeDocument::starter();
     assert_eq!(theme.id, CLASSIC_THEME_ID);
@@ -744,6 +800,11 @@ fn built_in_classic_uses_149_geometry() {
         assert_eq!(
             resolve_surface_size(&theme, 0, None, runtime),
             (expected_width, 46)
+        );
+        // Each provider column widens to fit `100% · 4h 59m`.
+        assert_eq!(
+            resolve_surface_size(&theme, 0, None, runtime.with_countdown_minutes(true)),
+            (expected_width + 18 * runtime.provider_count() as u32, 46)
         );
     }
 }

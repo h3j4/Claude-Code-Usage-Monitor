@@ -883,6 +883,10 @@ pub(super) fn value_entries(
     let status = language.text("Status");
     for (name, label) in [
         ("display.countdown", "Counting down"),
+        ("display.minutes", "Showing countdown minutes"),
+        ("taskbar.hidden", "Taskbar auto-hidden"),
+        ("taskbar.peek_y", "Hidden taskbar strip top"),
+        ("taskbar.peek_height", "Hidden taskbar strip height"),
         ("system.dark", "Dark mode"),
         ("data.loading", "Loading"),
         ("data.poll_ok", "Last update succeeded"),

@@ -175,6 +175,11 @@ pub(super) fn fetch_usage_with_fallback(token: &str) -> Result<UsageData, PollEr
         if (data.session.available && data.session.resets_at.is_none())
             || (data.weekly.available && data.weekly.resets_at.is_none())
         {
+            diagnose::log(format!(
+                "usage endpoint omitted reset times (session={} weekly={});                  sending a 1-token Messages API request",
+                data.session.resets_at.is_none(),
+                data.weekly.resets_at.is_none()
+            ));
             if let Ok(fallback) = fetch_usage_via_messages(token) {
                 let mut merged = data;
                 merged.session.available |= fallback.session.available;
@@ -192,6 +197,7 @@ pub(super) fn fetch_usage_with_fallback(token: &str) -> Result<UsageData, PollEr
     }
 
     // Fall back to Messages API with rate limit headers
+    diagnose::log("usage endpoint unsupported; sending a 1-token Messages API request");
     let result = fetch_usage_via_messages(token);
     if result.is_err() {
         diagnose::log("usage endpoint and Messages API fallback both failed");

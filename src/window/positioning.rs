@@ -818,6 +818,43 @@ pub(super) fn clamped_floating_offset(
     }
 }
 
+/// The part of an auto-hidden horizontal taskbar left on `monitor`, relative to
+/// `surface` in physical pixels: `(top, height)`. `None` while the taskbar is
+/// mostly shown, or for vertical taskbars.
+pub(super) fn taskbar_peek_band(surface: RECT, taskbar: RECT, monitor: RECT) -> Option<(i32, i32)> {
+    if !native_interop::is_taskbar_horizontal(taskbar) {
+        return None;
+    }
+    let top = taskbar.top.max(monitor.top);
+    let visible = taskbar.bottom.min(monitor.bottom) - top;
+    (visible > 0 && visible * 2 < taskbar.bottom - taskbar.top)
+        .then_some((top - surface.top, visible))
+}
+
+/// Measure the taskbar-embedded widget's on-screen strip so themes can draw
+/// into it while the taskbar is auto-hidden.
+pub(super) fn refresh_taskbar_peek() {
+    let target = lock_state().as_ref().and_then(|s| {
+        s.taskbar_hwnd
+            .filter(|_| s.embedded)
+            .map(|taskbar| (s.hwnd.to_hwnd(), taskbar.to_hwnd()))
+    });
+    let peek = target.and_then(|(hwnd, taskbar)| {
+        let surface = native_interop::get_window_rect_safe(hwnd)?;
+        let taskbar_rect = native_interop::get_taskbar_rect(taskbar)?;
+        let monitor = unsafe { MonitorFromWindow(taskbar, MONITOR_DEFAULTTONEAREST) };
+        let display = native_interop::find_monitors()
+            .into_iter()
+            .find(|display| display.handle == monitor)?;
+        let (top, height) = taskbar_peek_band(surface, taskbar_rect, display.rect)?;
+        let scale = monitor_scale(display);
+        Some((top as f64 / scale, height as f64 / scale))
+    });
+    if let Some(state) = lock_state().as_mut() {
+        state.taskbar_peek = peek;
+    }
+}
+
 pub(super) fn system_tray_reference(taskbar: RECT, tray: Option<RECT>) -> RECT {
     tray.unwrap_or_else(|| {
         if native_interop::is_taskbar_horizontal(taskbar) {

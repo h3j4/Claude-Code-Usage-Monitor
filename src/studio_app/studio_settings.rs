@@ -114,6 +114,18 @@ impl StudioApp {
                 setting_separator(ui);
                 setting_row(
                     ui,
+                    language.text("Reset countdown"),
+                    language.text("Show minutes in the time until each limit resets"),
+                    |ui| {
+                        changed |= Toggle::new(&mut self.settings.countdown_minutes)
+                            .labels(language.text("Minutes"), language.text("Rounded"))
+                            .show(ui)
+                            .changed();
+                    },
+                );
+                setting_separator(ui);
+                setting_row(
+                    ui,
                     language.text("Lock in taskbar"),
                     language.text("Keep the widget docked; never float automatically"),
                     |ui| {

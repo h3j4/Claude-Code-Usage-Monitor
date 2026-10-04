@@ -468,3 +468,19 @@ fn all_failed_providers_can_carry_their_previous_readings() {
     assert_eq!(claude.session.percentage, 21.0);
     assert!(claude.stale, "the carried reading must be marked stale");
 }
+
+#[test]
+fn countdown_refreshes_when_the_shown_unit_changes() {
+    let delay = |secs, minutes| time_until_display_change_from_secs(secs, minutes).as_secs();
+    // 2d 3h 4m 5s: the largest unit changes in a day, the hour in 4m 6s.
+    let two_days = 2 * 86_400 + 3 * 3_600 + 4 * 60 + 5;
+    assert_eq!(delay(two_days, false), 3 * 3_600 + 4 * 60 + 6);
+    assert_eq!(delay(two_days, true), 4 * 60 + 6);
+    // 2h 15m 30s: hours change in 15m 31s, minutes in 31s.
+    let two_hours = 2 * 3_600 + 15 * 60 + 30;
+    assert_eq!(delay(two_hours, false), 15 * 60 + 31);
+    assert_eq!(delay(two_hours, true), 31);
+    // Under an hour both styles already tick each minute, then each second.
+    assert_eq!(delay(5 * 60 + 9, true), delay(5 * 60 + 9, false));
+    assert_eq!(delay(42, true), 1);
+}

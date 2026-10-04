@@ -613,3 +613,31 @@ fn can_redock_at_tray(free_space: i32, width: i32) -> bool {
     };
     occupancy.can_restore(widget, 20)
 }
+
+#[test]
+fn hidden_taskbar_peek_band_is_the_on_screen_strip() {
+    let rect = |left, top, right, bottom| RECT {
+        left,
+        top,
+        right,
+        bottom,
+    };
+    let monitor = rect(0, 0, 5120, 1440);
+    // A 58px widget bottom-aligned in a 53px auto-hidden taskbar with 2px left.
+    let taskbar = rect(0, 1438, 5120, 1491);
+    let widget = rect(4051, 1433, 4452, 1491);
+    assert_eq!(taskbar_peek_band(widget, taskbar, monitor), Some((5, 2)));
+    // Shown, vertical, or fully off-screen taskbars have no peek strip.
+    assert_eq!(
+        taskbar_peek_band(widget, rect(0, 1387, 5120, 1440), monitor),
+        None
+    );
+    assert_eq!(
+        taskbar_peek_band(widget, rect(-46, 0, 2, 1440), monitor),
+        None
+    );
+    assert_eq!(
+        taskbar_peek_band(widget, rect(0, 1440, 5120, 1493), monitor),
+        None
+    );
+}

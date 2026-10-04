@@ -459,3 +459,7 @@ copilot_window_title = "ตัวติดตามการใช้งาน C
 "Lock in taskbar" = "Lock in taskbar"
 "Keep the widget docked; never float automatically" = "Keep the widget docked; never float automatically"
 "Locked" = "Locked"
+"Reset countdown" = "นับถอยหลังการรีเซ็ต"
+"Show minutes in the time until each limit resets" = "แสดงนาทีในเวลาที่เหลือก่อนแต่ละขีดจำกัดจะรีเซ็ต"
+"Minutes" = "นาที"
+"Rounded" = "ปัดเศษ"
