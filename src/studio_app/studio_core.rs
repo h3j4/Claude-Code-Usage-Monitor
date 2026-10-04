@@ -1,5 +1,12 @@
 use super::*;
 
+/// The footer only fits the release number, so drop any pre-release suffix
+/// such as a fork's `-h3j4.1`.
+pub(super) fn footer_version() -> String {
+    let version = env!("CARGO_PKG_VERSION");
+    format!("v{}", version.split(['-', '+']).next().unwrap_or(version))
+}
+
 fn clock_refresh_delay(interval: Duration) -> Duration {
     let interval_ms = interval.as_millis().max(1);
     let elapsed_ms = SystemTime::now()
@@ -924,7 +931,7 @@ impl StudioApp {
             .scope(|ui| {
                 ui.add_enabled_ui(!self.update_status.is_busy(), |ui| {
                     let icon_id = ui.id().with("version-update-icon");
-                    let version = format!("v{}", env!("CARGO_PKG_VERSION"));
+                    let version = footer_version();
                     let background = ui.painter().add(egui::Shape::Noop);
                     let button = egui::AtomLayout::new((
                         egui::RichText::new(&version).size(16.0).color(muted()),

@@ -547,7 +547,7 @@ fn diagnostics_page_has_logging_controls_and_menu_version() {
     }
     output.textures_delta.clear();
     assert!(text.find("Assets").unwrap() < text.find("Diagnostics").unwrap());
-    assert!(text.contains(&format!("v{}", env!("CARGO_PKG_VERSION"))));
+    assert!(text.contains(&super::studio_core::footer_version()));
     assert!(text.contains("Logging"));
     assert!(text.contains("Write diagnostic events to"));
     assert!(text.contains("Disabled"));
