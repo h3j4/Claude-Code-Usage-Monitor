@@ -563,9 +563,14 @@ pub(super) fn format_usage_line(base: &str, context: &DataContext) -> Option<Str
     let seconds = context
         .get(&format!("{provider}.{window}.reset.seconds"))
         .unwrap_or(0.0);
+    let duration = if context.get("display.minutes").unwrap_or(0.0) != 0.0 {
+        "duration"
+    } else {
+        "duration_short"
+    };
     Some(format!(
         "{percentage}% · {}",
-        format_value(seconds, "duration_short", context)
+        format_value(seconds, duration, context)
     ))
 }
 

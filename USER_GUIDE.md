@@ -107,6 +107,35 @@ support both directions. Custom themes need to support this setting too; a
 theme that always displays consumed usage may stay unchanged. See the
 [theme binding notes](README.md#usage) if you are editing usage expressions.
 
+## Show minutes in the reset countdown
+
+1. Open **Settings > Display**.
+2. Set **Reset countdown** to **Minutes** or **Rounded**.
+
+| Option | Example |
+| --- | --- |
+| **Rounded** (default) | `42% · 2h`, `42% · 3d` |
+| **Minutes** | `42% · 2h 15m`, `42% · 3d 4h` |
+
+With **Minutes**, the widget redraws every minute while a reset is under a day
+away, and the built-in themes widen each provider column slightly to fit the
+longer text. Custom themes can read `display.minutes` (1 when enabled) to adjust
+their own layout.
+
+## Draw into an auto-hidden taskbar
+
+When the taskbar is set to auto-hide, Windows leaves a thin strip of it on
+screen while it is hidden. A taskbar widget can draw gauges into that strip
+with these theme values:
+
+- `taskbar.hidden` is 1 while the taskbar is hidden, otherwise 0.
+- `taskbar.peek_y` and `taskbar.peek_height` give the visible strip's top and
+  height in the widget's own coordinates (0 while the taskbar is shown).
+
+For example, a progress layer with render `taskbar.hidden`, y
+`taskbar.peek_y`, and height `taskbar.peek_height / 2` fills the upper half of
+the strip.
+
 ## Claude extra limits in custom themes
 
 Claude may report extra quotas in its usage API, including model-specific caps.

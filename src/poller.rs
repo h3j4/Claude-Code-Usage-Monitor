@@ -536,21 +536,25 @@ fn is_leap(y: u64) -> bool {
     (y.is_multiple_of(4) && !y.is_multiple_of(100)) || y.is_multiple_of(400)
 }
 
-/// Calculate how long until the display text would change
-pub fn time_until_display_change(resets_at: Option<SystemTime>) -> Option<Duration> {
+/// Calculate how long until the display text would change. With `minutes`,
+/// countdowns read `3d 4h` or `2h 15m`, so they change one unit sooner.
+pub fn time_until_display_change(resets_at: Option<SystemTime>, minutes: bool) -> Option<Duration> {
     let reset = resets_at?;
     let remaining = reset.duration_since(SystemTime::now()).ok()?;
-    Some(time_until_display_change_from_secs(remaining.as_secs()))
+    Some(time_until_display_change_from_secs(
+        remaining.as_secs(),
+        minutes,
+    ))
 }
 
-fn time_until_display_change_from_secs(total_secs: u64) -> Duration {
+fn time_until_display_change_from_secs(total_secs: u64, minutes: bool) -> Duration {
     let total_mins = total_secs / 60;
     let total_hours = total_secs / 3600;
     let total_days = total_secs / 86400;
 
-    let current_bucket_start = if total_days >= 1 {
+    let current_bucket_start = if total_days >= 1 && !minutes {
         total_days * 86400
-    } else if total_hours >= 1 {
+    } else if total_hours >= 1 && (!minutes || total_days >= 1) {
         total_hours * 3600
     } else if total_mins >= 1 {
         total_mins * 60

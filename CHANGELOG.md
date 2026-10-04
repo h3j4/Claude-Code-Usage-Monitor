@@ -4,6 +4,13 @@ Notable changes to Claude Code Usage Monitor are documented here, newest first.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), with
 changes grouped into Added, Changed, Fixed, and Removed where applicable.
 
+## [Unreleased]
+
+### Added
+
+- Add a **Reset countdown** setting to Dashboard Settings that shows minutes in the time until each limit resets (`2h 15m`, `3d 4h`) instead of only the largest unit. The widget redraws on minute boundaries while minutes are shown, built-in themes widen their value columns to fit, and custom themes can read `display.minutes`.
+- Expose `taskbar.hidden`, `taskbar.peek_y`, and `taskbar.peek_height` to themes so taskbar widgets can draw into the strip an auto-hidden taskbar leaves on screen.
+
 ## [2.19.4] - 2026-10-13
 
 ### Fixed

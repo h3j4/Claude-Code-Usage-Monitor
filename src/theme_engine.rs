@@ -1324,7 +1324,7 @@ pub struct DataContext {
 /// Runtime environment used by theme expressions and layout. Provider state is
 /// deliberately independent of polling availability so a temporary provider
 /// error never causes the widget to jump or resize.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct ThemeRuntime {
     providers: ProviderSet,
     pub poll_ok: bool,
@@ -1334,6 +1334,12 @@ pub struct ThemeRuntime {
     /// the `.display` values and summaries using them follow this; `.percentage`
     /// always means consumption so severity thresholds keep their meaning.
     pub countdown: bool,
+    /// Include minutes in reset countdowns shown by usage summaries.
+    pub countdown_minutes: bool,
+    /// The strip of an auto-hidden taskbar still on screen, as `(top, height)`
+    /// in the primary surface's logical coordinates. `None` while the taskbar
+    /// is shown.
+    pub taskbar_peek: Option<(f64, f64)>,
     pub surface_nest: SurfaceNest,
     pub floating_card_opacity: u8,
     host_width: u32,
@@ -1348,6 +1354,8 @@ impl Default for ThemeRuntime {
             has_error: false,
             language: LanguageId::English,
             countdown: false,
+            countdown_minutes: false,
+            taskbar_peek: None,
             surface_nest: SurfaceNest::Taskbar,
             floating_card_opacity: 85,
             host_width: default_canvas_width(),
@@ -1378,6 +1386,8 @@ impl ThemeRuntime {
             has_error: false,
             language: LanguageId::English,
             countdown: false,
+            countdown_minutes: false,
+            taskbar_peek: None,
             surface_nest: SurfaceNest::Taskbar,
             floating_card_opacity: 85,
             host_width: default_canvas_width(),
@@ -1409,6 +1419,17 @@ impl ThemeRuntime {
     /// Count each allowance down towards its limit instead of up from zero.
     pub fn with_countdown(mut self, countdown: bool) -> Self {
         self.countdown = countdown;
+        self
+    }
+
+    pub fn with_taskbar_peek(mut self, peek: Option<(f64, f64)>) -> Self {
+        self.taskbar_peek = peek;
+        self
+    }
+
+    /// Show reset countdowns as `2h 15m` rather than `2h`.
+    pub fn with_countdown_minutes(mut self, minutes: bool) -> Self {
+        self.countdown_minutes = minutes;
         self
     }
 
@@ -1509,6 +1530,14 @@ impl DataContext {
             );
         }
         context.insert("display.countdown", runtime.countdown as u8 as f64);
+        context.insert("display.minutes", runtime.countdown_minutes as u8 as f64);
+        let (peek_y, peek_height) = runtime.taskbar_peek.unwrap_or((0.0, 0.0));
+        context.insert(
+            "taskbar.hidden",
+            runtime.taskbar_peek.is_some() as u8 as f64,
+        );
+        context.insert("taskbar.peek_y", peek_y);
+        context.insert("taskbar.peek_height", peek_height);
         if let Some(data) = data {
             for account in &data.accounts {
                 let key = format!(

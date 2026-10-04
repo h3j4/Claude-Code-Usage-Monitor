@@ -43,6 +43,8 @@ fn state_for(theme: ThemeDocument, placement: PlacementOverride) -> AppState {
         window_state_timer_active: false,
         custom_theme_enabled: true,
         usage_countdown: false,
+        countdown_minutes: false,
+        taskbar_peek: None,
         active_theme_path: None,
         active_theme: Some(theme),
         theme_clock_interval: None,

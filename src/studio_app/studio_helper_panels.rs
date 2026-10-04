@@ -101,6 +101,12 @@ pub(super) const TEXT_TEMPLATE_VALUES: &[TextTemplateValue] = &[
         kind: TextTemplateValueKind::Number,
     },
     TextTemplateValue {
+        group: "General",
+        label: "Showing countdown minutes",
+        expression: "display.minutes",
+        kind: TextTemplateValueKind::Number,
+    },
+    TextTemplateValue {
         group: "Active provider",
         label: "Session summary",
         expression: "active.session",
