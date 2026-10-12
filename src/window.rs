@@ -131,7 +131,6 @@ struct AppState {
 
     custom_theme_enabled: bool,
     usage_countdown: bool,
-    countdown_minutes: bool,
     taskbar_peek: Option<(f64, f64)>,
     active_theme_path: Option<PathBuf>,
     active_theme: Option<ThemeDocument>,
@@ -620,7 +619,8 @@ fn theme_runtime_from_state(state: &AppState) -> ThemeRuntime {
         .with_poll_state(poll_ok, has_error)
         .with_language(state.language)
         .with_countdown(state.usage_countdown)
-        .with_countdown_minutes(state.countdown_minutes)
+        // This fork always shows minutes in reset countdowns.
+        .with_countdown_minutes(true)
         .with_taskbar_peek(state.taskbar_peek)
         .with_nest(nest)
         .with_floating_card_opacity(opacity)
@@ -2035,7 +2035,8 @@ pub fn run() {
 
         let mut settings = load_settings();
         let classic_theme_path = theme_engine::ensure_starter_theme().ok();
-        let mut configured_theme_path = settings.active_theme_path.as_deref().map(PathBuf::from);
+        // This fork always shows the built-in Classic widget.
+        let mut configured_theme_path = classic_theme_path.clone();
         let mut configured_theme = configured_theme_path
             .as_deref()
             .and_then(|path| theme_engine::load_theme(path).ok())
@@ -2126,7 +2127,7 @@ pub fn run() {
             .with_poll_state(false, false)
             .with_language(language)
             .with_countdown(settings.usage_countdown)
-            .with_countdown_minutes(settings.countdown_minutes);
+            .with_countdown_minutes(true);
         let (initial_width, initial_height) = active_theme
             .as_ref()
             .map(|theme| {
@@ -2222,7 +2223,6 @@ pub fn run() {
                 window_state_timer_active: false,
                 custom_theme_enabled,
                 usage_countdown: settings.usage_countdown,
-                countdown_minutes: settings.countdown_minutes,
                 taskbar_peek: None,
                 active_theme_path,
                 active_theme,
@@ -2836,9 +2836,7 @@ fn schedule_countdown_timer() {
     let min_delay = s.data.as_ref().and_then(|data| {
         data.all_usage()
             .flat_map(|usage| usage.sections())
-            .filter_map(|section| {
-                poller::time_until_display_change(section.resets_at, s.countdown_minutes)
-            })
+            .filter_map(|section| poller::time_until_display_change(section.resets_at, true))
             .min()
     });
 
@@ -2909,7 +2907,8 @@ fn check_language_change() {
 fn reload_external_settings(hwnd: HWND) {
     let settings = load_settings();
     let language_override = settings.language.as_deref().and_then(LanguageId::from_code);
-    let theme_path = settings.active_theme_path.as_ref().map(PathBuf::from);
+    // This fork always shows the built-in Classic widget.
+    let theme_path = theme_engine::ensure_starter_theme().ok();
     let providers_changed;
     let lock_enabled;
     {
@@ -2926,7 +2925,6 @@ fn reload_external_settings(hwnd: HWND) {
         state.poll_interval_ms = settings.poll_interval_ms;
         state.providers = settings.enabled_providers();
         state.usage_countdown = settings.usage_countdown;
-        state.countdown_minutes = settings.countdown_minutes;
         update_configured_placement(
             state,
             settings.placement_override,

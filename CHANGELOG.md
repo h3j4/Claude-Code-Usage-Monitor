@@ -8,8 +8,14 @@ changes grouped into Added, Changed, Fixed, and Removed where applicable.
 
 ### Added
 
-- Add a **Reset countdown** setting to Dashboard Settings that shows minutes in the time until each limit resets (`2h 15m`, `3d 4h`) instead of only the largest unit. The widget redraws on minute boundaries while minutes are shown, built-in themes widen their value columns to fit, and custom themes can read `display.minutes`.
+- Show minutes in reset countdowns (`2h 15m`, `3d 4h`) instead of only the largest unit. The widget redraws on minute boundaries, Classic widens its value columns to fit, and custom themes can read `display.minutes`.
 - Expose `taskbar.hidden`, `taskbar.peek_y`, and `taskbar.peek_height` to themes so taskbar widgets can draw into the strip an auto-hidden taskbar leaves on screen.
+- Show each provider's 5-hour and weekly gauges side by side in Classic's hidden-taskbar strip, with the weekly gauge 30% darker.
+
+### Removed
+
+- Remove the Compact Fluent Quad built-in theme and the bundled Minecraft theme, and delete their installed copies.
+- Remove the Active theme setting; the widget always shows the built-in Classic theme.
 
 ## [2.19.4] - 2026-10-13
 

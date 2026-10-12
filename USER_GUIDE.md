@@ -29,6 +29,9 @@ the folder containing the executable.
 
 ## Duplicate and customise a built-in theme
 
+> This build always shows the built-in Classic widget. Theme Studio can still
+> create and edit themes, but they don't change the running widget.
+
 Built-in themes are read-only. Create an editable copy to make your own design;
 the original stays available to switch back to.
 
@@ -36,7 +39,7 @@ the original stays available to switch back to.
 
 1. Open **Theme Studio** from the dashboard's navigation.
 2. In the **Theme** dropdown at the top, select the theme you want to start from,
-   such as **Compact Fluent Quad**. Built-in themes are marked **(built-in)**.
+   such as **Classic v1**. Built-in themes are marked **(built-in)**.
 3. Click the toolbar's copy icon beside the theme dropdown. Hover over it to see
    the **Duplicate...** tooltip. Use this top toolbar control to copy the whole
    theme; the **Duplicate** control beneath the layer list copies a layer.
@@ -67,9 +70,8 @@ changes, choose **Save and continue**, **Discard changes**, or **Cancel**.
 
 ### Switch back to a built-in theme
 
-Select the original theme from the **Theme** dropdown in Theme Studio. You can
-also choose it under **Settings > Appearance > Active theme**. Switching applies
-the selected theme; your saved custom copy remains available in the dropdown.
+Select the original theme from the **Theme** dropdown in Theme Studio. Your saved
+custom copy remains available in the dropdown.
 
 Custom theme files are stored in:
 
@@ -102,27 +104,20 @@ a custom theme must include layers for the providers you want to display.
 | **Used** (default) | How much of the allowance you have consumed. | After using 30%, the display reads 30%. |
 | **Remaining** | How much allowance is left. | After using 30%, the display reads 70%. |
 
-The setting saves automatically. The default theme and Compact Fluent Quad
-support both directions. Custom themes need to support this setting too; a
+The setting saves automatically. The Classic theme supports both directions. Custom themes need to support this setting too; a
 theme that always displays consumed usage may stay unchanged. See the
 [theme binding notes](README.md#usage) if you are editing usage expressions.
 
-## Show minutes in the reset countdown
+## Reset countdown minutes
 
-1. Open **Settings > Display**.
-2. Set **Reset countdown** to **Minutes** or **Rounded**.
-
-| Option | Example |
-| --- | --- |
-| **Rounded** (default) | `42% · 2h`, `42% · 3d` |
-| **Minutes** | `42% · 2h 15m`, `42% · 3d 4h` |
-
-With **Minutes**, the widget redraws every minute while a reset is under a day
-away, and the built-in themes widen each provider column slightly to fit the
-longer text. Custom themes can read `display.minutes` (1 when enabled) to adjust
-their own layout.
+Reset countdowns include minutes, such as `42% · 2h 15m` or `42% · 3d 4h`. The
+widget redraws every minute while a reset is under a day away. Custom themes can
+read `display.minutes` (always 1) to size their own layout.
 
 ## Draw into an auto-hidden taskbar
+
+When the taskbar is auto-hidden, the Classic widget shows each provider's
+5-hour gauge, then its weekly gauge, in the thin strip Windows leaves on screen.
 
 When the taskbar is set to auto-hide, Windows leaves a thin strip of it on
 screen while it is hidden. A taskbar widget can draw gauges into that strip
