@@ -28,10 +28,7 @@ const BUILTIN_THEME_SOURCES: &[(&str, &str)] = &[
         CLASSIC_THEME_ID,
         include_str!(concat!(env!("OUT_DIR"), "/classic-usage-widget.json")),
     ),
-    (
-        COMPACT_FLUENT_QUAD_THEME_ID,
-        include_str!(concat!(env!("OUT_DIR"), "/compact-fluent-quad.json")),
-    ),
+    // This fork ships Classic as its only theme.
 ];
 
 /// Bundled starting points are copied into the managed library only when they
@@ -55,6 +52,9 @@ const BUNDLED_THEME_ASSETS: &[(&str, &[u8])] = &[
 ];
 
 const REMOVED_BUILTIN_THEME_IDS: &[&str] = &[
+    // Removed by this fork, including the editable Minecraft copy.
+    COMPACT_FLUENT_QUAD_THEME_ID,
+    MINECRAFT_THEME_ID,
     "mission-control",
     "neon-reactor",
     "rpg-party-hud",

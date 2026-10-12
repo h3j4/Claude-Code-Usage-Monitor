@@ -311,7 +311,6 @@ pub fn ensure_starter_theme() -> Result<PathBuf, String> {
             crate::app_settings::write_json_atomic(&path, &theme)?;
         }
     }
-    ensure_bundled_editable_themes(&directory, &assets_directory())?;
     for removed_id in REMOVED_BUILTIN_THEME_IDS {
         let path = directory.join(format!("{removed_id}.json"));
         match std::fs::remove_file(path) {
@@ -323,6 +322,8 @@ pub fn ensure_starter_theme() -> Result<PathBuf, String> {
     Ok(directory.join(format!("{CLASSIC_THEME_ID}.json")))
 }
 
+// This fork no longer installs the bundled Minecraft theme; kept for its tests.
+#[cfg_attr(not(test), allow(dead_code))]
 pub(super) fn ensure_bundled_editable_themes(
     directory: &Path,
     asset_directory: &Path,

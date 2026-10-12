@@ -1707,6 +1707,572 @@
               "color": "#1F1F1FFF"
             }
           }
+        },
+        {
+          "id": "claude-session-segments-dark-peek",
+          "name": "dark Claude Code 5-hour segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "claude-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "claude.session.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#D97757FF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          }
+        },
+        {
+          "id": "claude-session-segments-light-peek",
+          "name": "light Claude Code 5-hour segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "claude-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "claude.session.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#D97757FF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          }
+        },
+        {
+          "id": "claude-weekly-segments-dark-peek",
+          "name": "dark Claude Code 7-day segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "claude-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "claude.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#98533DFF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "claude-weekly-segments-light-peek",
+          "name": "light Claude Code 7-day segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "claude-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "claude.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#98533DFF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "codex-session-segments-dark-peek",
+          "name": "dark Codex 5-hour segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "codex-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "codex.five_hour.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#F5F5F5FF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          }
+        },
+        {
+          "id": "codex-session-segments-light-peek",
+          "name": "light Codex 5-hour segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "codex-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "codex.five_hour.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#1F1F1FFF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          }
+        },
+        {
+          "id": "codex-weekly-segments-dark-peek",
+          "name": "dark Codex 7-day segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "codex-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "codex.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#ACACACFF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "codex-weekly-segments-light-peek",
+          "name": "light Codex 7-day segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "codex-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "codex.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#161616FF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "antigravity-session-segments-dark-peek",
+          "name": "dark Antigravity 5-hour segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "antigravity-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "antigravity.session.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#4285F4FF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          }
+        },
+        {
+          "id": "antigravity-session-segments-light-peek",
+          "name": "light Antigravity 5-hour segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "antigravity-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "antigravity.session.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#4285F4FF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          }
+        },
+        {
+          "id": "antigravity-weekly-segments-dark-peek",
+          "name": "dark Antigravity 7-day segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "antigravity-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "antigravity.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#2E5DABFF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "antigravity-weekly-segments-light-peek",
+          "name": "light Antigravity 7-day segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "antigravity-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "antigravity.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#2E5DABFF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "opencode-session-segments-dark-peek",
+          "name": "dark OpenCode 5-hour segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "opencode-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "opencode.session.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#4CAF50FF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          }
+        },
+        {
+          "id": "opencode-session-segments-light-peek",
+          "name": "light OpenCode 5-hour segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "opencode-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "opencode.session.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#2E7D32FF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          }
+        },
+        {
+          "id": "opencode-weekly-segments-dark-peek",
+          "name": "dark OpenCode long-window segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "opencode-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "opencode.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#357A38FF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "opencode-weekly-segments-light-peek",
+          "name": "light OpenCode long-window segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "opencode-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "opencode.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#205823FF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "cursor-session-segments-dark-peek",
+          "name": "dark Cursor Auto segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "cursor-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "cursor.session.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#F5F5F5FF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          }
+        },
+        {
+          "id": "cursor-session-segments-light-peek",
+          "name": "light Cursor Auto segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "cursor-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "cursor.session.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#1A1A1AFF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          }
+        },
+        {
+          "id": "cursor-weekly-segments-dark-peek",
+          "name": "dark Cursor API segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "cursor-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "cursor.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#ACACACFF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "cursor-weekly-segments-light-peek",
+          "name": "light Cursor API segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "cursor-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "cursor.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#121212FF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "grok-pool-segments-dark-peek",
+          "name": "dark Grok pool segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "grok-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "grok.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#6140ACFF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "grok-pool-segments-light-peek",
+          "name": "light Grok pool segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "grok-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "grok.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#5729A6FF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "copilot-pool-segments-dark-peek",
+          "name": "dark Copilot pool segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (system.dark)",
+          "parent": "copilot-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "copilot.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#A5326BFF"
+            },
+            "track": {
+              "color": "#444444FF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
+        },
+        {
+          "id": "copilot-pool-segments-light-peek",
+          "name": "light Copilot pool segments (hidden taskbar strip)",
+          "render": "taskbar.hidden * (1 - system.dark)",
+          "parent": "copilot-provider",
+          "y": "taskbar.peek_y",
+          "width": "ceil(10 / max(1, providers.count)) * 11 - 1",
+          "height": "taskbar.peek_height",
+          "content": {
+            "type": "progress",
+            "value": "copilot.weekly.display",
+            "direction": "left_to_right",
+            "fill": {
+              "color": "#991B53FF"
+            },
+            "track": {
+              "color": "#AAAAAAFF"
+            },
+            "segments": 10,
+            "segments_expression": "ceil(10 / max(1, providers.count))",
+            "segment_gap": "1"
+          },
+          "x": "ceil(10 / max(1, providers.count)) * 11 - 1 + 6"
         }
       ]
     },

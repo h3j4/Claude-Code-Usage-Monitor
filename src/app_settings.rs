@@ -68,10 +68,6 @@ pub struct SettingsFile {
     /// the widget counts down towards a limit rather than up from zero.
     #[serde(default)]
     pub usage_countdown: bool,
-    /// Show reset countdowns with minutes (`2h 15m`) instead of only the
-    /// largest unit (`2h`).
-    #[serde(default)]
-    pub countdown_minutes: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub active_theme_path: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -133,7 +129,6 @@ impl Default for SettingsFile {
             show_copilot: false,
             custom_theme_enabled: true,
             usage_countdown: false,
-            countdown_minutes: false,
             active_theme_path: None,
             dashboard_width: None,
             dashboard_height: None,
@@ -612,22 +607,6 @@ mod tests {
         let counting_down = decode_settings(r#"{"usage_countdown":true}"#).unwrap();
         assert!(counting_down.usage_countdown);
         assert_eq!(settings_json(&counting_down)["usage_countdown"], true);
-    }
-
-    #[test]
-    fn countdown_minutes_default_off_and_round_trip() {
-        let settings = SettingsFile::default();
-        assert!(!settings.countdown_minutes);
-        assert_eq!(settings_json(&settings)["countdown_minutes"], false);
-        assert!(
-            !decode_settings(r#"{"poll_interval_ms":900000}"#)
-                .unwrap()
-                .countdown_minutes
-        );
-
-        let minutes = decode_settings(r#"{"countdown_minutes":true}"#).unwrap();
-        assert!(minutes.countdown_minutes);
-        assert_eq!(settings_json(&minutes)["countdown_minutes"], true);
     }
 
     #[test]

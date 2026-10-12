@@ -731,6 +731,39 @@ fn usage_lines_handle_loading_errors_missing_resets_and_language() {
 }
 
 #[test]
+fn classic_draws_both_gauges_into_a_hidden_taskbar_strip() {
+    let section = |percentage| crate::models::UsageSection {
+        available: true,
+        percentage,
+        resets_at: None,
+    };
+    let usage = AppUsageData::from_iter([(
+        ProviderId::Claude,
+        crate::models::UsageData {
+            session: section(60.0),
+            weekly: section(30.0),
+            ..Default::default()
+        },
+    )]);
+    let theme = ThemeDocument::starter();
+    let runtime = ThemeRuntime::new(true, false, false);
+    let shown = render_theme_surface_with_runtime(&theme, 0, Some(&usage), runtime);
+    // A 2px strip at the very top of the widget.
+    let hidden = render_theme_surface_with_runtime(
+        &theme,
+        0,
+        Some(&usage),
+        runtime.with_taskbar_peek(Some((0.0, 2.0))),
+    );
+    let width = shown.width as usize;
+    let strip = |rendered: &RenderedTheme| rendered.pixels[..width * 2].to_vec();
+    assert!(strip(&shown).iter().all(|pixel| pixel >> 24 == 0));
+    assert!(strip(&hidden).iter().any(|pixel| pixel >> 24 != 0));
+    // Below the strip the widget is unchanged.
+    assert_eq!(shown.pixels[width * 2..], hidden.pixels[width * 2..]);
+}
+
+#[test]
 fn usage_lines_include_minutes_only_when_enabled() {
     let usage = AppUsageData::from_iter([(
         ProviderId::Claude,
@@ -825,8 +858,9 @@ fn starter_theme_round_trips_and_validates() {
     // 1.4.9 palette follows the taskbar mode without runtime recolouring:
     // five providers over two windows in two modes, plus Grok and Copilot,
     // which fill only the long-window row, plus a credit overlay on that row
-    // for the three providers that report credits.
-    assert_eq!(segments, vec![10; 5 * 2 * 2 + 2 * 2 + 3 * 2]);
+    // for the three providers that report credits. Each gauge also has a
+    // copy for the hidden-taskbar strip.
+    assert_eq!(segments, vec![10; (5 * 2 * 2 + 2 * 2) * 2 + 3 * 2]);
     assert!(theme.surfaces[0]
         .children
         .iter()
@@ -1850,9 +1884,8 @@ fn starter_tray_icons_follow_enabled_providers() {
 
 #[test]
 fn built_in_themes_are_valid_and_cannot_be_saved_as_editable_themes() {
-    assert_eq!(BUILTIN_THEME_SOURCES.len(), 2);
+    assert_eq!(BUILTIN_THEME_SOURCES.len(), 1);
     assert_eq!(BUILTIN_THEME_SOURCES[0].0, CLASSIC_THEME_ID);
-    assert_eq!(BUILTIN_THEME_SOURCES[1].0, COMPACT_FLUENT_QUAD_THEME_ID);
     assert!(REMOVED_BUILTIN_THEME_IDS
         .iter()
         .all(|id| !is_builtin_theme_id(id)));

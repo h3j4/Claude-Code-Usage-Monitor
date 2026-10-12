@@ -5,9 +5,7 @@ impl StudioApp {
     pub(super) fn settings_page(&mut self, ui: &mut egui::Ui) {
         let language = self.language();
         let mut changed = false;
-        let mut requested_theme = None;
         let mut open_theme_studio = false;
-        let themes = available_themes(self.theme_path.as_deref(), &self.theme);
         if let Some(error) = &self.settings_error {
             ui.colored_label(egui::Color32::from_rgb(196, 64, 64), error);
             ui.add_space(8.0);
@@ -114,18 +112,6 @@ impl StudioApp {
                 setting_separator(ui);
                 setting_row(
                     ui,
-                    language.text("Reset countdown"),
-                    language.text("Show minutes in the time until each limit resets"),
-                    |ui| {
-                        changed |= Toggle::new(&mut self.settings.countdown_minutes)
-                            .labels(language.text("Minutes"), language.text("Rounded"))
-                            .show(ui)
-                            .changed();
-                    },
-                );
-                setting_separator(ui);
-                setting_row(
-                    ui,
                     language.text("Lock in taskbar"),
                     language.text("Keep the widget docked; never float automatically"),
                     |ui| {
@@ -162,29 +148,9 @@ impl StudioApp {
                     },
                 );
             });
+            // This fork always shows the built-in Classic widget, so there is
+            // no theme picker.
             section(ui, language.text("Appearance"), |ui| {
-                setting_row(
-                    ui,
-                    language.text("Active theme"),
-                    language.text("The widget is managed in Theme Studio"),
-                    |ui| {
-                        Dropdown::from_id_salt("active_theme")
-                            .width(220.0)
-                            .selected_text(&self.theme.name)
-                            .show_ui(ui, |ui| {
-                                for theme in &themes {
-                                    let selected =
-                                        self.theme_path.as_deref() == Some(theme.path.as_path());
-                                    if dropdown_selectable_label(ui, selected, &theme.label)
-                                        .clicked()
-                                    {
-                                        requested_theme = Some(theme.path.clone());
-                                    }
-                                }
-                            });
-                    },
-                );
-                setting_separator(ui);
                 setting_row(
                     ui,
                     language.text("Theme editor"),
@@ -209,9 +175,6 @@ impl StudioApp {
             }
             self.preview_dirty = true;
             self.save_settings();
-        }
-        if let Some(path) = requested_theme {
-            self.request_activate_theme(path);
         }
         if open_theme_studio {
             self.page = Page::Studio;
