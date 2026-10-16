@@ -196,7 +196,7 @@ fn decode_package<R: Read + Seek>(reader: R) -> Result<DecodedPackage, String> {
         if entry.is_dir() {
             continue;
         }
-        let name = safe_entry_name(entry.name())?;
+        let name = safe_entry_name(&entry.name().map_err(|error| error.to_string())?)?;
         if !names.insert(name.clone()) {
             return Err(format!("Theme package contains duplicate entry '{name}'"));
         }
