@@ -451,7 +451,6 @@ pub fn classic_context_menu() -> ContextMenuDocument {
                 "Start with Windows",
                 Action::ToggleStartup,
             ),
-            ContextMenuItem::action("lock-taskbar", "Lock in taskbar", Action::ToggleTaskbarLock),
             ContextMenuItem::submenu("language", "Language", languages),
             ContextMenuItem::separator("settings-separator"),
             ContextMenuItem::action(

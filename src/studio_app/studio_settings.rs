@@ -112,18 +112,6 @@ impl StudioApp {
                 setting_separator(ui);
                 setting_row(
                     ui,
-                    language.text("Lock in taskbar"),
-                    language.text("Keep the widget docked; never float automatically"),
-                    |ui| {
-                        changed |= Toggle::new(&mut self.settings.lock_taskbar)
-                            .labels(language.text("Locked"), language.text("Floating"))
-                            .show(ui)
-                            .changed();
-                    },
-                );
-                setting_separator(ui);
-                setting_row(
-                    ui,
                     language.text("Language"),
                     language.text("Language used by the app and widget"),
                     |ui| {
