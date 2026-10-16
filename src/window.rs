@@ -862,20 +862,14 @@ fn save_settings_or_log(settings: &SettingsFile, context: &str) {
     }
 }
 
+/// This fork always keeps the widget locked in the taskbar, so a custom menu's
+/// toggle only re-docks it.
 pub(super) fn toggle_taskbar_lock(hwnd: HWND) {
-    let enabled = {
-        let mut state = lock_state();
-        let Some(state) = state.as_mut() else {
-            return;
-        };
-        state.lock_taskbar = !state.lock_taskbar;
-        state.lock_taskbar
-    };
-    save_state_settings();
-    if enabled {
-        redock_locked_widget(hwnd);
+    if let Some(state) = lock_state().as_mut() {
+        state.lock_taskbar = true;
     }
-    diagnose::log(format!("taskbar lock toggled: {enabled}"));
+    save_state_settings();
+    redock_locked_widget(hwnd);
 }
 
 fn tray_usage_summary_lines(

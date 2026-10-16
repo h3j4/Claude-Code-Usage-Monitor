@@ -16,6 +16,7 @@ changes grouped into Added, Changed, Fixed, and Removed where applicable.
 
 - Remove the Compact Fluent Quad built-in theme and the bundled Minecraft theme, and delete their installed copies.
 - Remove the Active theme setting; the widget always shows the built-in Classic theme.
+- Remove the Lock in taskbar setting and menu item; the widget is always locked in the taskbar, and a saved floating placement re-docks on the next start.
 
 ## [2.19.4] - 2026-10-13
 

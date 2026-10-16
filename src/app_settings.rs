@@ -167,6 +167,16 @@ impl SettingsFile {
         // The widget and Theme Studio are now one system. Keep accepting this
         // legacy setting so older settings files migrate cleanly.
         self.custom_theme_enabled = true;
+        // This fork always keeps the widget locked in the taskbar, so a saved
+        // floating placement is dropped and the widget re-docks.
+        self.lock_taskbar = true;
+        if self
+            .placement_override
+            .as_ref()
+            .is_some_and(|placement| placement.nest == "floating")
+        {
+            self.placement_override = None;
+        }
         self.dashboard_width = valid_dashboard_dimension(self.dashboard_width);
         self.dashboard_height = valid_dashboard_dimension(self.dashboard_height);
     }
@@ -447,6 +457,31 @@ fn now_unix() -> u64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn normalized_settings_always_lock_the_widget_into_the_taskbar() {
+        let placement = |nest: &str| PlacementOverride {
+            nest: nest.into(),
+            monitor_index: 0,
+            screen_x: 3962,
+            screen_y: 1382,
+            tray_offset: 0,
+            floating_host: None,
+        };
+        let mut settings = SettingsFile {
+            lock_taskbar: false,
+            placement_override: Some(placement("floating")),
+            ..Default::default()
+        };
+        settings.normalize();
+        assert!(settings.lock_taskbar);
+        assert_eq!(settings.placement_override, None);
+
+        // A position along the taskbar is kept.
+        settings.placement_override = Some(placement("taskbar"));
+        settings.normalize();
+        assert_eq!(settings.placement_override, Some(placement("taskbar")));
+    }
 
     #[test]
     fn taskbar_lock_is_opt_in_and_survives_settings_round_trip() {
