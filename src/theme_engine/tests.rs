@@ -988,14 +988,15 @@ fn starter_theme_round_trips_and_validates() {
     // five providers over two windows in two modes, plus Grok and Copilot,
     // which fill only the long-window row, plus a credit overlay on that row
     // for the three providers that report credits, plus the two eight-segment
-    // Fable layers. Each ten-segment gauge also has a copy for the
-    // hidden-taskbar strip, drawn last.
+    // Fable layers. Each gauge also has a copy for the hidden-taskbar strip,
+    // drawn last.
     assert_eq!(
         segments,
         [
             vec![10; 5 * 2 * 2 + 2 * 2 + 3 * 2],
             vec![8; 2],
-            vec![10; 5 * 2 * 2 + 2 * 2]
+            vec![10; 5 * 2 * 2 + 2 * 2],
+            vec![8; 2]
         ]
         .concat()
     );
