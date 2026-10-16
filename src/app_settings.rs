@@ -467,6 +467,7 @@ mod tests {
             screen_y: 1382,
             tray_offset: 0,
             floating_host: None,
+            monitor_device: None,
         };
         let mut settings = SettingsFile {
             lock_taskbar: false,

@@ -850,7 +850,9 @@ fn saved_monitor_device_survives_settings_round_trip_and_normalization() {
         let json = serde_json::to_string(&settings).unwrap();
         let mut restored: app_settings::SettingsFile = serde_json::from_str(&json).unwrap();
         restored.normalize();
-        assert_eq!(restored.placement_override, Some(saved));
+        // This fork always docks the widget, so a floating placement is dropped.
+        let expected = (nest == "taskbar").then_some(saved);
+        assert_eq!(restored.placement_override, expected);
     }
     let legacy: app_settings::PlacementOverride =
         serde_json::from_str(r#"{"nest":"floating","monitor_index":1}"#).unwrap();
