@@ -834,10 +834,10 @@ fn built_in_classic_uses_149_geometry() {
             resolve_surface_size(&theme, 0, None, runtime),
             (expected_width, 46)
         );
-        // Each provider column widens to fit `100% · 4h 59m`.
+        // Each provider column widens to fit `100% · 23h 59m`.
         assert_eq!(
             resolve_surface_size(&theme, 0, None, runtime.with_countdown_minutes(true)),
-            (expected_width + 18 * runtime.provider_count() as u32, 46)
+            (expected_width + 22 * runtime.provider_count() as u32, 46)
         );
     }
 }
@@ -875,12 +875,53 @@ fn built_in_classic_adds_a_fable_column_when_the_limit_is_available() {
             Some(&usage),
             ThemeRuntime::new(true, false, false)
         ),
-        (310, 46)
+        // This fork sizes the Fable bar like the provider bars, which span
+        // 109px when Claude is the only provider.
+        (329, 46)
     );
     assert!(theme.surfaces[0]
         .children
         .iter()
         .any(|object| object.id == "fable-provider"));
+}
+
+#[test]
+fn classic_fable_bar_follows_claude_and_matches_the_provider_bars() {
+    let theme = ThemeDocument::starter();
+    let children = &theme.surfaces[0].children;
+    let columns: Vec<_> = children
+        .iter()
+        .filter(|object| object.parent.as_deref() == Some("provider-row"))
+        .map(|object| object.id.as_str())
+        .collect();
+    let claude = columns
+        .iter()
+        .position(|id| *id == "claude-provider")
+        .unwrap();
+    assert_eq!(columns[claude + 1], "fable-provider");
+    let bar = |id: &str| {
+        let object = children.iter().find(|object| object.id == id).unwrap();
+        match &object.content {
+            SceneContent::Progress {
+                segments,
+                segments_expression,
+                ..
+            } => (
+                object.width.0.clone(),
+                *segments,
+                segments_expression
+                    .as_ref()
+                    .map(|expression| expression.0.clone()),
+            ),
+            _ => panic!("{id} is not a bar"),
+        }
+    };
+    for mode in ["dark", "light"] {
+        assert_eq!(
+            bar(&format!("fable-weekly-segments-{mode}")),
+            bar(&format!("claude-weekly-segments-{mode}"))
+        );
+    }
 }
 
 #[test]
@@ -949,6 +990,12 @@ fn horizontal_fable_columns_follow_claude_visibility_and_usage_direction() {
                             assert_eq!(evaluate(&value.0, &context).unwrap(), percentage);
                         }
                         SceneContent::Text { template, .. } => {
+                            // This fork's Classic drops the "Fable" label.
+                            let text = if theme.id == CLASSIC_THEME_ID {
+                                text.trim_start_matches("Fable ")
+                            } else {
+                                text
+                            };
                             assert_eq!(format_template(template, &context), text);
                         }
                         _ => panic!("unexpected Fable content"),
@@ -987,19 +1034,10 @@ fn starter_theme_round_trips_and_validates() {
     // 1.4.9 palette follows the taskbar mode without runtime recolouring:
     // five providers over two windows in two modes, plus Grok and Copilot,
     // which fill only the long-window row, plus a credit overlay on that row
-    // for the three providers that report credits, plus the two eight-segment
-    // Fable layers. Each gauge also has a copy for the hidden-taskbar strip,
-    // drawn last.
-    assert_eq!(
-        segments,
-        [
-            vec![10; 5 * 2 * 2 + 2 * 2 + 3 * 2],
-            vec![8; 2],
-            vec![10; 5 * 2 * 2 + 2 * 2],
-            vec![8; 2]
-        ]
-        .concat()
-    );
+    // for the three providers that report credits, plus the two Fable layers,
+    // sized like the provider bars. Each gauge also has a copy for the
+    // hidden-taskbar strip.
+    assert_eq!(segments, vec![10; (5 * 2 * 2 + 2 * 2 + 2) * 2 + 3 * 2]);
     assert!(theme.surfaces[0]
         .children
         .iter()

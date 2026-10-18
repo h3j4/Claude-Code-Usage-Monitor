@@ -12,6 +12,14 @@ changes grouped into Added, Changed, Fixed, and Removed where applicable.
 - Expose `taskbar.hidden`, `taskbar.peek_y`, and `taskbar.peek_height` to themes so taskbar widgets can draw into the strip an auto-hidden taskbar leaves on screen.
 - Show each provider's 5-hour and weekly gauges side by side in Classic's hidden-taskbar strip, with the weekly gauge 30% darker.
 
+### Changed
+
+- Show Classic's Fable gauge right after Claude, sized like the provider bars, in teal for contrast against the empty gauge, with an unlabelled value and a column only as wide as its bar or value.
+
+### Fixed
+
+- Widen value columns by 22px when minutes are shown so `100% · 23h 59m` no longer clips by 2px.
+
 ### Removed
 
 - Remove the Compact Fluent Quad and Classic Vertical built-in themes and the bundled Minecraft theme, and delete their installed copies.

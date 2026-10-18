@@ -7,9 +7,13 @@ Run after rebasing onto a new upstream release, on files taken from upstream:
 
 The script rewrites the theme files in place and refuses to run twice.
 
-1. Value columns widen by 18px while reset countdowns show minutes
-   (`display.minutes`), so `100% · 4h 59m` fits.
-2. Classic gets a strip for the auto-hidden taskbar: each provider's 5-hour
+1. Value columns widen by 22px while reset countdowns show minutes
+   (`display.minutes`), so the longest value, `100% · 23h 59m` (82px), fits.
+2. Classic's Fable bar matches the provider bars' length, its column follows
+   Claude's and is only as wide as its bar or value, its value drops the
+   "Fable" label, and it is teal, which stays visible against the empty bar
+   (at least 3:1 contrast, strip included).
+3. Classic gets a strip for the auto-hidden taskbar: each provider's 5-hour
    gauge and, 6px to its right, its weekly gauge 30% darker, drawn into the
    rows the hidden taskbar leaves on screen (`taskbar.peek_y`/`peek_height`).
 """
@@ -21,9 +25,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 THEMES = ROOT / "src" / "themes"
-MINUTES = " + display.minutes * 18"
+MINUTES = " + display.minutes * 22"
 SEGMENTS = "ceil(10 / max(1, providers.count)) * 11 - 1"
 PROVIDERS = ["claude", "codex", "antigravity", "opencode", "cursor", "grok", "copilot"]
+# Fable bar and text colours for dark and light taskbars.
+FABLE_COLORS = {
+    "dark": ("#5EEAD4FF", "#99F6E4FF"),
+    "light": ("#115E59FF", "#115E59FF"),
+}
 
 
 def darker(color, factor=0.7):
@@ -36,6 +45,53 @@ def darker(color, factor=0.7):
         round(blue * factor),
         alpha,
     )
+
+
+def place_fable_after_claude(main):
+    """Size the Fable bar like the provider bars and show it next to Claude."""
+    layers = main["children"]
+    by_id = {layer["id"]: layer for layer in layers}
+    if "fable-provider" not in by_id:
+        return
+    # Fit the column to the wider of its bar and its value, plus the row gap.
+    column = f"max({SEGMENTS}, 62{MINUTES})"
+    width, reserved = re.subn(
+        r"fable\.available \* (\(\d+[^)]*\)|\d+)",
+        f"fable.available * ({column} + 3)",
+        main["width"],
+    )
+    if reserved != 1:
+        raise SystemExit("unexpected Fable reservation: " + main["width"])
+    main["width"] = width
+    by_id["fable-provider"]["width"] = column
+    for mode in ("dark", "light"):
+        by_id[f"fable-weekly-value-{mode}"]["width"] = column
+        fable = by_id[f"fable-weekly-segments-{mode}"]
+        claude = by_id[f"claude-weekly-segments-{mode}"]
+        fable["width"] = claude["width"]
+        for field in ("segments", "segments_expression"):
+            fable["content"][field] = claude["content"][field]
+        bar_color, text_color = FABLE_COLORS[mode]
+        fable["content"]["fill"]["color"] = bar_color
+        # The column's position beside Claude identifies it, so drop the name.
+        label = by_id[f"fable-weekly-value-{mode}"]["content"]
+        label["color"]["color"] = text_color
+        if not label["template"].startswith("Fable "):
+            raise SystemExit("unexpected Fable label: " + label["template"])
+        label["template"] = label["template"].removeprefix("Fable ")
+    fable = [
+        layer
+        for layer in layers
+        if layer["id"] == "fable-provider" or layer.get("parent") == "fable-provider"
+    ]
+    rest = [layer for layer in layers if layer not in fable]
+    claude = next(i for i, layer in enumerate(rest) if layer["id"] == "claude-provider")
+    after_claude = next(
+        i
+        for i, layer in enumerate(rest)
+        if i > claude and layer.get("parent") == "provider-row"
+    )
+    main["children"] = rest[:after_claude] + fable + rest[after_claude:]
 
 
 def widen_for_minutes(main):
@@ -123,6 +179,7 @@ def rewrite(name, patch):
 
 def classic(main):
     widen_for_minutes(main)
+    place_fable_after_claude(main)
     return f"{add_hidden_taskbar_strip(main)} strip layers"
 
 
