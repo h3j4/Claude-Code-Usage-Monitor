@@ -50,45 +50,54 @@ pub(super) fn data_directories() -> Vec<PathBuf> {
 }
 
 /// MSIX redirects the Store application's roaming data into its package.
+/// Newer Store builds keep it in `Claude-Data\claude_<publisher>` instead.
 /// Keep the ordinary install first and discovery deterministic for machines
-/// with both installations. Missing config files remain watchable candidates.
+/// with several installations. Missing config files remain watchable
+/// candidates.
 fn data_directories_in(roaming: Option<&Path>, local: Option<&Path>) -> Vec<PathBuf> {
     let mut paths: Vec<_> = roaming
         .map(|path| path.join("Claude"))
         .into_iter()
         .collect();
     if let Some(local) = local {
-        let mut packages: Vec<_> = std::fs::read_dir(local.join("Packages"))
-            .into_iter()
-            .flatten()
-            .flatten()
-            .filter(|entry| entry.file_type().is_ok_and(|kind| kind.is_dir()))
-            .filter(|entry| {
-                entry.file_name().to_str().is_some_and(|name| {
-                    name.strip_prefix("Claude_").is_some_and(|publisher| {
-                        publisher.len() == 13
-                            && publisher
-                                .bytes()
-                                .all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit())
-                    })
-                })
-            })
-            .map(|entry| entry.path())
-            .collect();
-        packages.sort_by_key(|path| {
-            (
-                path.file_name()
-                    .is_none_or(|name| name != "Claude_pzs8sxrjxfjjc"),
-                path.clone(),
-            )
-        });
+        paths.extend(publisher_directories(&local.join("Claude-Data"), "claude_"));
         paths.extend(
-            packages
+            publisher_directories(&local.join("Packages"), "Claude_")
                 .into_iter()
                 .map(|path| path.join("LocalCache").join("Roaming").join("Claude")),
         );
     }
     paths
+}
+
+/// Subdirectories named `<prefix><13-character publisher id>`, with the
+/// Anthropic publisher first.
+fn publisher_directories(parent: &Path, prefix: &str) -> Vec<PathBuf> {
+    let mut directories: Vec<_> = std::fs::read_dir(parent)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .filter(|entry| entry.file_type().is_ok_and(|kind| kind.is_dir()))
+        .filter(|entry| {
+            entry.file_name().to_str().is_some_and(|name| {
+                name.strip_prefix(prefix).is_some_and(|publisher| {
+                    publisher.len() == 13
+                        && publisher
+                            .bytes()
+                            .all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit())
+                })
+            })
+        })
+        .map(|entry| entry.path())
+        .collect();
+    directories.sort_by_key(|path| {
+        (
+            path.file_name().and_then(|name| name.to_str())
+                != Some(&format!("{prefix}pzs8sxrjxfjjc")),
+            path.clone(),
+        )
+    });
+    directories
 }
 
 fn local_state_path(config_path: &Path) -> PathBuf {
@@ -570,6 +579,26 @@ mod tests {
         assert_eq!(
             data_directories_in(Some(&roaming), Some(&root.join("absent"))),
             vec![roaming.join("Claude")]
+        );
+
+        // Newer Store builds keep their data outside the package.
+        let data = local.join("Claude-Data");
+        for name in [
+            "claude_bbbbbbbbbbbbb",
+            "claude_pzs8sxrjxfjjc",
+            "claude_short",
+        ] {
+            std::fs::create_dir_all(data.join(name)).unwrap();
+        }
+        assert_eq!(
+            data_directories_in(Some(&roaming), Some(&local)),
+            vec![
+                roaming.join("Claude"),
+                data.join("claude_pzs8sxrjxfjjc"),
+                data.join("claude_bbbbbbbbbbbbb"),
+                packages.join("Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude"),
+                packages.join("Claude_aaaaaaaaaaaaa/LocalCache/Roaming/Claude"),
+            ]
         );
         assert!(data_directories_in(None, None).is_empty());
     }

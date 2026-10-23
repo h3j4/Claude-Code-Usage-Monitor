@@ -18,6 +18,7 @@ changes grouped into Added, Changed, Fixed, and Removed where applicable.
 
 ### Fixed
 
+- Read Claude usage through the Claude desktop app's login again after the Store app moved its data to `%LOCALAPPDATA%\Claude-Data\claude_<publisher>`, which left the widget reporting no credentials.
 - Widen value columns by 22px when minutes are shown so `100% · 23h 59m` no longer clips by 2px.
 
 ### Removed
